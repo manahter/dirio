@@ -16,7 +16,7 @@ setuptools.setup(
     author='manahter',
     author_email='manahter@gmail.com',
     platforms=['Linux', 'Windows', 'Mac'],
-    keywords = ['independent', 'class', 'process', 'thread'],
+    keywords=['independent', 'class', 'process', 'thread'],
     packages=setuptools.find_packages(),
     license='MIT',
     zip_safe=True,
@@ -38,7 +38,29 @@ setuptools.setup(
 )
 
 # Resources;
-# https://pypi.org/classifiers/
 # https://www.codementor.io/@ajayagrawal295/how-to-publish-your-own-python-package-12tbhi20tf
 # https://github.com/Carglglz/upydevice/blob/master/setup.py
 # https://aligoren.com/python-ile-pypi-paketleri-olusturmak/
+# https://twine.readthedocs.io/en/latest/
+# https://pypi.org/classifiers/
+
+# ################################
+# PYPi'ye modul yukleme:
+
+# Twine yoksa, kur
+#   $ pip install twine
+
+# #################### Bu dizinde;
+# Dist paketlerini olustur
+#   $ python setup.py sdist bdist_wheel
+
+# TestPyPi'ye gonderme:
+#   $ twine upload -r testpypi dist/*
+#       username: ...
+#       password:
+#       ...
+
+# PYPi'ye gonderme:
+#   $ twine upload dist/*
+
+# NOT: aynı isim ve versiyonda dosyayı birdaha yükleyemiyorsun.

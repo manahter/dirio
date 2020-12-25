@@ -3,10 +3,26 @@
 [![Dirio](https://img.shields.io/github/license/manahter/dirio)](https://github.com/manahter/dirio/blob/main/LICENSE)
 ![GitHub last commit](https://img.shields.io/github/last-commit/manahter/dirio)
 
+The class in your main file becomes the client. 
+Another working Class is created in parallel. 
+When the client calls the method, the Class in the other file does the job.
+The class in the main file gets the reply to the method.
+
 ## Features
 * Inherit Class independently from running script.
 * Uses serialization method with JSON
 * You do not wait in classes like Socket
+
+
+## Install
+```buildoutcfg
+pip3 install dirio
+```
+or
+```buildoutcfg
+pip install dirio
+```
+
 
 ## Usage
 
