@@ -1,7 +1,3 @@
-# Resources;
-# https://pypi.org/classifiers/
-# https://www.codementor.io/@ajayagrawal295/how-to-publish-your-own-python-package-12tbhi20tf
-# https://github.com/Carglglz/upydevice/blob/master/setup.py
 import setuptools
 
 
@@ -36,3 +32,8 @@ setuptools.setup(
         'Topic :: Software Development'
     ]
 )
+
+# Resources;
+# https://pypi.org/classifiers/
+# https://www.codementor.io/@ajayagrawal295/how-to-publish-your-own-python-package-12tbhi20tf
+# https://github.com/Carglglz/upydevice/blob/master/setup.py
