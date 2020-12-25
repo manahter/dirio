@@ -160,6 +160,30 @@ def set_decorator(self):
             setattr(self, attr, get_decorator(self, attribute))
 
 
+def get_result(path_code, dr_wait):
+    start_time = time.time()
+    wait_time = 1
+
+    # Cevabı okurken bekle
+    while wait_time:
+        if os.path.exists(path_code):
+            try:
+                with open(path_code) as f:
+                    data = json.load(f)
+                    if RESULT in data:
+                        return data.get(RESULT)
+            except:
+                pass
+
+        # -1 ise cevap gelene kadar bekle
+        # 0 ise sadece bir kere kontrol et
+        # 5 gibi değer ise, 5 sn kadar bekle
+        if dr_wait >= 0:
+            wait_time = time.time() - start_time < dr_wait
+
+    return None
+
+
 def get_decorator(self, func):
     def wrapper(*args, **kwargs):
         # kwargs'ın içinde,
@@ -169,6 +193,7 @@ def get_decorator(self, func):
         #       Sunucu ise, o değerdeki dosyaya RESULT değerini kayıt yap demek oluyor
         # Hiçbiri yoksa     ; En son herhangi bir cevabı döndürür
         dr_code = kwargs.pop("dr_code", False)
+        dr_wait = kwargs.pop("dr_wait", 0)
 
         # Fonksiyonun klasörü
         path = os.path.join(self._dr_dir, func.__name__)
@@ -189,18 +214,9 @@ def get_decorator(self, func):
         # İstemci ise ve Parametreler uygunsa, dosyaya kaydeder.
         if not self._dr_active and check_type(args) and check_type(kwargs):
 
-            # dr_code -> int -> Bu kodla olan veri varsa döndür
+            # dr_code -> int -> Bu kodla olan veri varsa döndür. Belirtilen süre kadar cevabı bekle
             if type(dr_code) in (bool, int) and dr_code > 1:
-                path_code = os.path.join(path, str(dr_code))
-
-                if os.path.exists(path_code):
-                    try:
-                        with open(path_code) as f:
-                            return json.load(f).get(RESULT)
-                    except:
-                        pass
-
-                return None
+                return get_result(os.path.join(path, str(dr_code)), dr_wait)
 
             # Func dizinindeki dosyaların isimlerini int olarak alır ve
             # ["1", "2", ... ] String listesinde en büyük sayıyı verir. Yoksa 10 değerini verir
@@ -208,8 +224,13 @@ def get_decorator(self, func):
             new_code = son_code + 1
 
             # Datayı dosyaya yaz
-            with open(os.path.join(path, str(new_code)), 'w') as f:
+            full_path = os.path.join(path, str(new_code))
+            with open(full_path, 'w') as f:
                 json.dump({ARGS: args, KWARGS: kwargs}, f)
+
+            # Cevabı bu süre kadar bekle
+            if dr_wait:
+                return get_result(full_path, dr_wait)
 
             # dr_code -> True -> Kodu döndür
             if dr_code is True:
