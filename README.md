@@ -10,7 +10,7 @@
 
 ## Usage
 
-```
+```python
 # Inherit class
 try_cls = Dirio(target=TryClass, args=("arg1",), kwargs={"key1": "val1"}, worker=False)
 
