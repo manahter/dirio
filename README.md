@@ -11,10 +11,13 @@
 ## Usage
 
 ```python
+# Import module
+from dirio import Dirio
+
+
 # Inherit class
 # args mut be tuple. Don't forget to put a comma -> args=(xx, )
 try_cls = Dirio(target=TryClass, args=("arg1",), kwargs={"key1": "val1"})
-
 # PARAMETERS:
 #   target      : class : Target Class
 #   args        : tuple : Arguments for Target Class
