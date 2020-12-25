@@ -12,7 +12,22 @@
 
 ```python
 # Inherit class
-try_cls = Dirio(target=TryClass, args=("arg1",), kwargs={"key1": "val1"}, worker=False)
+# args mut be tuple. Don't forget to put a comma -> args=(xx, )
+try_cls = Dirio(target=TryClass, args=("arg1",), kwargs={"key1": "val1"})
+
+# PARAMETERS:
+#   target      : class : Target Class
+#   args        : tuple : Arguments for Target Class
+#   kwargs      : dict  : Keyword Arguments for Target Class
+#   tempdir     : str   : Temporary directory path. If it is empty, system temp path is used.
+#   keeperiod   : float : !!! Not activated. Do not use.
+#   looperiod   : float : Independent Class renewal frequency. 
+#                         Default: .05
+#                         Smaller value, more CPU
+#                         Bigger  value, delayed processing
+#   worker      : bool  : You don't use. The class itself uses
+
+
 
 # Standard, Call your method, 
 # First time return value is None
