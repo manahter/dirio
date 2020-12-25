@@ -1,5 +1,5 @@
 # Dirio - Python Independent Class Process
-[![Dirio](https://img.shields.io/badge/release-0.1.0-orange?&style=flat&llogoColor=white)](https://github.com/manahter/dirio)
+[![Dirio](https://img.shields.io/badge/version-0.1.0-orange?&style=flat&llogoColor=white)](https://github.com/manahter/dirio)
 [![Dirio](https://img.shields.io/github/license/manahter/dirio)](https://github.com/manahter/dirio/blob/main/LICENSE)
 ![GitHub last commit](https://img.shields.io/github/last-commit/manahter/dirio)
 
