@@ -56,6 +56,10 @@ if __name__ == "__main__":
         print("Returned metod 1 data :", dr_cls.metod1(dr_code=cv))
 
         print("Methods called this way give the last return value :  nothing or dr_code=False")
+
+        cv2 = dr_cls.metod2(10, val2="2", dr_code=True)
+        print("Search by code only                 :", dr_cls.dr_code(cv2, wait=1))
+
         print("Trying metod 2, called and returned :", dr_cls.metod2(10, val2="2", dr_code=False))
         print("Trying metod 3, called and returned :", dr_cls.metod3(15, val2="3"))
         print("\n"*2)

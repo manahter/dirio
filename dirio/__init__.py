@@ -34,24 +34,25 @@ Dosyalama Şekli;
                         |-------> "Değişkendeki değer"
 """
 
-import fcntl
 
-
-# ################################ File LOCK - Henüz kullanmadık
-# https://stackoverflow.com/questions/4843359/python-lock-a-file
-def lock_to_file(filename):
-    """ acquire exclusive lock file access """
-    locked_file_descriptor = open(filename, 'w+')
-    fcntl.lockf(locked_file_descriptor, fcntl.LOCK_EX)
-    return locked_file_descriptor
-
-
-def lock_to_release(locked_file_descriptor):
-    """ release exclusive lock file access """
-    locked_file_descriptor.close()
-
-
-# ##############################################################
+# import fcntl
+#
+#
+# # ################################ File LOCK - Henüz kullanmadık
+# # https://stackoverflow.com/questions/4843359/python-lock-a-file
+# def lock_to_file(filename):
+#     """ acquire exclusive lock file access """
+#     locked_file_descriptor = open(filename, 'w+')
+#     fcntl.lockf(locked_file_descriptor, fcntl.LOCK_EX)
+#     return locked_file_descriptor
+#
+#
+# def lock_to_release(locked_file_descriptor):
+#     """ release exclusive lock file access """
+#     locked_file_descriptor.close()
+#
+#
+# # ##############################################################
 
 
 def new_dir(tempdir, module, class_name, args, kwargs):
@@ -150,7 +151,7 @@ def set_decorator(self):
 
         # Bu isimlerdeyse, dekoratör ekleme, boşver.
         # if attr in ("__getattribute__", "__setattr__", "__new__"):
-        if (attr.startswith("__") and attr.endswith("__")) or attr in ("dr_terminate",):
+        if (attr.startswith("__") and attr.endswith("__")) or attr in ("dr_terminate", "dr_code"):
             continue
 
         # Eğer çağrılabilir fonksiyon ise dekorator ekliyoruz
@@ -215,20 +216,26 @@ def get_decorator(self, func):
         if not self._dr_active and check_type(args) and check_type(kwargs):
 
             # dr_code -> int -> Bu kodla olan veri varsa döndür. Belirtilen süre kadar cevabı bekle
-            if type(dr_code) in (bool, int) and dr_code > 1:
+            if type(dr_code) is int and dr_code > 1:
                 return get_result(os.path.join(path, str(dr_code)), dr_wait)
 
             # Func dizinindeki dosyaların isimlerini int olarak alır ve
             # ["1", "2", ... ] String listesinde en büyük sayıyı verir. Yoksa 10 değerini verir
-            son_code = max(10, 10, *[int(i) for i in os.listdir(path) if i.isdigit()])
+            son_code = self._dr_last_code
             new_code = son_code + 1
 
-            # Datayı dosyaya yaz
             full_path = os.path.join(path, str(new_code))
+            while os.path.exists(full_path):
+                new_code += 1
+                full_path = os.path.join(path, str(new_code))
+
+            # Datayı dosyaya yaz
             with open(full_path, 'w') as f:
                 json.dump({ARGS: args, KWARGS: kwargs}, f)
 
-            # Cevabı bu süre kadar bekle
+            self._dr_last_code = new_code
+
+            # Cevabı bu süre kadar bekle ve dön
             if dr_wait:
                 return get_result(full_path, dr_wait)
 
@@ -296,6 +303,7 @@ class Dirio:
         :param worker: bool: Read Only. Değiştirme. Sınıfın kendine has kullanımına dahildir.
         """
         self._dr_active = worker
+        self._dr_last_code = 10
         self._dr_last_times = {}
         self._dr_keep_period = keeperiod
         self._dr_loop_period = looperiod
@@ -442,3 +450,16 @@ class Dirio:
     def dr_terminate(self):
         if os.path.exists(self._dr_dir):
             shutil.rmtree(self._dr_dir)
+
+    # Kodu direkt olarak okumak için
+    def dr_code(self, code, wait=0):
+        if type(code) is int:
+            code = str(code)
+
+        # Tüm fonksiyon klasörlerini gezer, eğer içinde elimizdeki koddan dosya varsa onu okur
+        for func_name in [j for j in os.listdir(self._dr_dir) if os.path.isdir(os.path.join(self._dr_dir, j))]:
+            func_path = os.path.join(self._dr_dir, func_name)
+            if code in os.listdir(func_path):
+                return get_result(os.path.join(func_path, code), wait)
+
+        return None

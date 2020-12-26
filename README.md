@@ -1,7 +1,9 @@
 # Dirio - Python Independent Class Process
-[![Dirio](https://img.shields.io/badge/version-0.1.1-orange?&style=flat&llogoColor=white)](https://github.com/manahter/dirio)
+[![PyPi Version](https://img.shields.io/pypi/v/dirio)](https://github.com/manahter/dirio)
+[![Python Version](https://img.shields.io/pypi/pyversions/dirio)](https://github.com/manahter/dirio)
 [![Dirio](https://img.shields.io/github/license/manahter/dirio)](https://github.com/manahter/dirio/blob/main/LICENSE)
 ![GitHub last commit](https://img.shields.io/github/last-commit/manahter/dirio)
+[![PyPi Downloads](https://img.shields.io/pypi/dm/dirio)](https://github.com/manahter/dirio)
 
 The class in your main file becomes the client. 
 Another working Class is created in parallel. 
@@ -65,6 +67,10 @@ call_code = try_cls.yourmethod("arg1", key="value", dr_code=True)
 # Give the result of call code 12
 try_cls.yourmethod("arg1", key="value", dr_code=call_code)
 #-> Returned: None
+
+# After a short while. Call it directly from the dr_code
+try_cls.dr_code(dr_code=call_code)
+#-> Returned: "result_of_previous_call_returned"
 
 # If None, the method operation is not yet run or finished.
 # We can call again and again

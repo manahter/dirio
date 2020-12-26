@@ -8,7 +8,7 @@ def readme():
 
 setuptools.setup(
     name='dirio',
-    version='0.1.1',
+    version='0.1.2',
     description='Python Independent Class Process. Uses serialization method with JSON',
     url='http://github.com/manahter/dirio',
     long_description_content_type='text/markdown',
@@ -45,7 +45,8 @@ setuptools.setup(
 # https://pypi.org/classifiers/
 
 # ################################
-# PYPi'ye modul yukleme:
+# ########## PYPi'ye modul yukleme
+# ################################
 
 # Twine yoksa, kur
 #   $ pip install twine
@@ -62,5 +63,11 @@ setuptools.setup(
 
 # PYPi'ye gonderme:
 #   $ twine upload dist/*
+
+# Diğer Kullanım çeşitleri:
+# Test PYPi'ye gönder
+#   $ twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+# Yüklü dosyaları atla, yüklenmemişleri gönder (Test PYPi için)
+#   $ twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/*
 
 # NOT: aynı isim ve versiyonda dosyayı birdaha yükleyemiyorsun.
