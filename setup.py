@@ -8,7 +8,7 @@ def readme():
 
 setuptools.setup(
     name='dirio',
-    version='0.1.2',
+    version='0.1.4',
     description='Python Independent Class Process. Uses serialization method with JSON',
     url='http://github.com/manahter/dirio',
     long_description_content_type='text/markdown',

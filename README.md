@@ -92,6 +92,18 @@ try_cls.yourmethod("arg1", key="value", dr_wait=-1)
 # Terminate the Dirio Process. 
 # Make sure to use this at the end of the script.
 try_cls.dr_terminate()
+
+# When the result of the code returns, run the function.
+# Function must take a parameter named 'result'. The return value is put in this parameter.
+try_cls.dr_bind(code=call_code, func=your_func, args=("arg1", ), kwargs={"key1": "val1"})
+# -> Calling:  your_func(arg1, key1="val1", result="dr_result_value")
+
+# If we check it in the cycle, it will get faster results.
+# Sometimes need to check if there is event. Binds work this way.
+try_cls.dr_binds_check()
+
+# Is active, control
+try_cls.dr_isactive()
 ```
 
 NOTE : Sorry, my English is poor. I use translation.

@@ -151,7 +151,8 @@ def set_decorator(self):
 
         # Bu isimlerdeyse, dekoratör ekleme, boşver.
         # if attr in ("__getattribute__", "__setattr__", "__new__"):
-        if (attr.startswith("__") and attr.endswith("__")) or attr in ("dr_terminate", "dr_code"):
+        if (attr.startswith("__") and attr.endswith("__")) or attr in ("dr_terminate", "dr_code",
+                                                                       "dr_bind", "dr_binds_check", "dr_isactive"):
             continue
 
         # Eğer çağrılabilir fonksiyon ise dekorator ekliyoruz
@@ -291,6 +292,7 @@ def get_decorator(self, func):
 
 class Dirio:
     _dr_inwork = False
+    _dr_binds = {}
 
     def __init__(self, target=None, args=(), kwargs={}, tempdir="", keeperiod=10, looperiod=.05, worker=False):
         """
@@ -302,6 +304,7 @@ class Dirio:
         :param looperiod: int: Sunucu için, döngüde bekleme süresi. Küçük olursa işlemciden, büyük olursa işlemden zarar
         :param worker: bool: Read Only. Değiştirme. Sınıfın kendine has kullanımına dahildir.
         """
+        self._dr_bind = {}
         self._dr_active = worker
         self._dr_last_code = 10
         self._dr_last_times = {}
@@ -448,11 +451,12 @@ class Dirio:
             time.sleep(self._dr_loop_period)
 
     def dr_terminate(self):
+        """İşlemi bitirir"""
         if os.path.exists(self._dr_dir):
             shutil.rmtree(self._dr_dir)
 
-    # Kodu direkt olarak okumak için
     def dr_code(self, code, wait=0):
+        """Dönüşü koddan direkt olarak okumayı sağlar."""
         if type(code) is int:
             code = str(code)
 
@@ -463,3 +467,27 @@ class Dirio:
                 return get_result(os.path.join(func_path, code), wait)
 
         return None
+
+    def dr_bind(self, code, func, args=(), kwargs={}):
+        """Girilen kod ile sonuç alındığında, 'func'u çağırır. Parametrelerini de girer.
+        Sonuçları arayabilmesi için, arada 'dr_binds_check'in çalıştırılması gerekir.
+        Fonksiyonun alacağı ilk parametre, code'un dönüş değeri olmalı"""
+        self._dr_binds[code] = [func, args, kwargs]
+
+    def dr_binds_check(self):
+        """Sonuçları kontrol eder. Sonuçlar geldiyse, Bind'leri çalıştırır"""
+        event = False
+        for code, vals in self._dr_binds.copy().items():
+            result = self.dr_code(code)
+            if result is not None:
+                func = vals[0]
+                args = vals[1]
+                kwargs = vals[2]
+                func(*args, **kwargs, result=result)
+                self._dr_binds.pop(code)
+                event = True
+
+        return event
+
+    def dr_isactive(self):
+        return self._dr_inwork and os.path.exists(self._dr_dir)
