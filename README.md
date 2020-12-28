@@ -15,6 +15,9 @@ The class in the main file gets the reply to the method.
 * Uses serialization method with JSON
 * You do not wait in classes like Socket
 
+## Cons
+* Since it is JSON based, it supports; dict, list, tuple, int, str, float, bool, type (None). 
+  Does not support serialize of other types (like object etc)
 
 ## Install
 ```buildoutcfg

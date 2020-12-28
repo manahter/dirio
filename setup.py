@@ -64,10 +64,10 @@ setuptools.setup(
 # PYPi'ye gonderme:
 #   $ twine upload dist/*
 
-# Diğer Kullanım çeşitleri:
-# Test PYPi'ye gönder
+# Diger Kullanim cesitleri:
+# Test PYPi'ye gonder
 #   $ twine upload --repository-url https://test.pypi.org/legacy/ dist/*
-# Yüklü dosyaları atla, yüklenmemişleri gönder (Test PYPi için)
+# Yuklu dosyalari atla, yuklenmemisleri gonder (Test PYPi icin)
 #   $ twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/*
 
-# NOT: aynı isim ve versiyonda dosyayı birdaha yükleyemiyorsun.
+# NOT: ayni isim ve versiyonda dosyayi birdaha yukleyemiyorsun.
